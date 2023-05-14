@@ -1,5 +1,6 @@
 const joinButton = document.getElementById('join');
 const adminCodeInput = document.getElementById('grade');
+const goBackButton = document.getElementById('goBack');
 
 joinButton.addEventListener('click', () => {
   const nameInput = document.getElementById('name');
