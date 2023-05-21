@@ -1,0 +1,203 @@
+body {
+    background-color: rgb(248, 246, 207);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+  
+.header-title {
+    text-align: center; /* 수정된 부분: 가운데 정렬 */
+    margin-bottom: 10px;
+    font-size: 45px;
+}
+  
+.user-info {
+    display: flex;
+    margin-bottom: 10px;
+}
+  
+.user-info img {
+    margin-right: 5px;
+    width: 30px;
+    height: 30px;
+}
+  
+.user-info #username {
+    margin-right: 10px; /* 버튼과 텍스트 사이의 간격 */
+}
+
+.user-info #logout {
+    margin-left: 10px; /* 버튼과 텍스트 사이의 간격 */
+}
+
+.user-info-space {
+    margin-bottom: 20px;
+    font-size: 30px;
+}
+  
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(2);
+    grid-gap: 20px;
+}
+  
+.button-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-row #edit-word {
+    display: flex;
+    justify-content: center; /* 가로 가운데 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+    margin: 0 auto; /* 수평 가운데 정렬 */
+}
+  
+.button-grid button {
+    width: 150px;
+    height: 50px;
+}
+  
+  
+.table-container {
+    max-height: 250px;
+    overflow-y: auto;
+  }
+  
+  .word-table {
+    width: 100%;
+  }
+  
+  .word-table th,
+  .word-table td {
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .button-container {
+    margin-bottom: 10px;
+  }
+  
+  .button-container button {
+    margin-right: 10px;
+  }
+
+  .container {
+    text-align: center;
+  }
+  
+  .button-container {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+  
+  .title {
+    text-align: center;
+  }
+  
+  .button-container button {
+    font-size: 16px;
+    padding: 10px 20px;
+    color: black;
+    background-color: white;
+    border: none;
+    transition: border-width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  }
+  
+  .button-container button:hover,
+  .button-container button:focus {
+    outline: none;
+    border: 2px solid gray;
+    background-color: lightgray;
+  }
+
+  .word-table{
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.word-table th, .word-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+
+  .word-table th {
+    background-color: #f2f2f2;
+  }
+  
+#go-back:hover {
+    background-color: #4287f5;
+    color: #fff;
+}
+
+#go-back {
+    width: fit-content;
+    background-color: transparent;
+    border: 1px solid rgb(205, 212, 215);
+    border-radius: 10px;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  margin-bottom: 10px;
+  padding: 8px;
+  text-align: left;
+}
+
+.form-group input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group input[type="text"]::placeholder {
+  text-align: left;
+}
+
+.input-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+.label-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 5px;
+}
+
+.label-container label {
+  margin-right: 5px;
+}
+
+.search-container {
+  margin-bottom: 20px;
+  
+}
+
+.search-container img {
+  width: 15px; /* 원하는 가로 크기로 조정 */
+  height: auto; /* 세로 크기는 자동으로 조정되어 비율 유지 */
+}
