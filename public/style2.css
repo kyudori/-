@@ -201,3 +201,7 @@ body {
   width: 15px; /* 원하는 가로 크기로 조정 */
   height: auto; /* 세로 크기는 자동으로 조정되어 비율 유지 */
 }
+
+.hidden {
+  display: none;
+}

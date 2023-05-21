@@ -178,6 +178,11 @@ body {
     padding: 0px 10px;
 }
 
+.score-input {
+    display: flex;
+    align-items: center;
+}
+
 .minus_btn {
     font-size: 30px;
     margin: 0 auto;

@@ -14,7 +14,7 @@
         <div class="space"></div><br>
         <div class="user-info">
             <img src="user.png" alt="User Icon">
-            <span id="username">sogong8 님</span>
+            <span id="username"></span>
         </div>
 
         <div class="space"></div><br>
@@ -24,12 +24,10 @@
         </div><br>
 
         <div class="targetScore">
-            <div class="button-grid">
-                <button class="minus_btn">-</button>
-            </div>
-            <div class="score">60</div>
-            <div class="button-grid">
-                <button class="plus_btn">+</button>
+            <div class="score-input">
+                <button class="minus_btn_side">-</button>
+                <input id="scoreInput" type="number" value="0" min="0" max="100">
+                <button class="plus_btn_side">+</button>
             </div>
         </div>
 
@@ -45,6 +43,6 @@
         </div>
 
     </header>
-
+    <script src="script.js"></script>
 </body>
 </html>

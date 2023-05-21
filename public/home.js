@@ -56,7 +56,7 @@ async function checkAdminStatus() {
   // Daily Test 목표 점수 버튼 클릭 시
   const dailyTestGoalButton = document.getElementById('daily-test-goal-button');
   dailyTestGoalButton.addEventListener('click', () => {
-    window.location.href = 'daily-test-goal.html'; // Daily Test 목표 점수 페이지로 이동
+    window.location.href = 'targetScore.html'; // Daily Test 목표 점수 페이지로 이동
   });
 
   // Daily Test 버튼 클릭 시

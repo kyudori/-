@@ -38,6 +38,10 @@ const Users = sequelize.define('Users', {
     type: DataTypes.BOOLEAN,
     allowNull: false
   },
+  Goal: {
+    type: DataTypes. INTEGER,
+    allowNull: true
+  },
   Score: {
     type: DataTypes.INTEGER,
     allowNull: true
@@ -85,10 +89,11 @@ app.post('/register', async (req, res) => {
     await sequelize.sync();
     const user = await Users.create({
       Name: name,
-      Userid: userid,  // 변경된 열 이름: Userid
+      Userid: userid,
       Password: password,
-      Email: email,  // 변경된 열 이름: Email
+      Email: email, 
       Admin: adminCode === 'sogong8',
+      Goal: null,
       Score: null,
       Level: null
     });
@@ -117,6 +122,7 @@ app.post('/login', async (req, res) => {
             Password: user.Password,
             Email: user.Email,
             Admin: user.Admin,
+            Goal: user.Goal,
             Score: user.Score,
             Level: user.Level,
             createdAt: user.createdAt,

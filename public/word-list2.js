@@ -64,39 +64,40 @@ for (var i = 0; i < rows.length; i++) {
     rows[i].appendChild(memoCell);
   }
 }
-
+  
 // 알파벳 순으로 단어 정렬하는 함수
 function sortWordsByAlphabet() {
-  var table = document.querySelector('.word-table');
-  var tbody = table.querySelector('tbody');
-  var rows = Array.from(tbody.querySelectorAll('tr'));
-
-  rows.sort(function(row1, row2) {
-    var word1 = row1.querySelector('td:nth-child(1)').textContent.toLowerCase();
-    var word2 = row2.querySelector('td:nth-child(1)').textContent.toLowerCase();
-    if (word1 < word2) {
-      return -1;
-    } else if (word1 > word2) {
-      return 1;
-    } else {
-      return 0;
+    var table = document.querySelector('.word-table');
+    var tbody = table.querySelector('tbody');
+    var rows = Array.from(tbody.querySelectorAll('tr'));
+  
+    rows.sort(function(row1, row2) {
+      var word1 = row1.querySelector('td:nth-child(1)').textContent.toLowerCase();
+      var word2 = row2.querySelector('td:nth-child(1)').textContent.toLowerCase();
+      if (word1 < word2) {
+        return -1;
+      } else if (word1 > word2) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  
+    // 기존 행을 모두 제거
+    tbody.innerHTML = '';
+  
+    // 정렬된 행을 다시 테이블에 추가
+    for (var i = 0; i < rows.length; i++) {
+      tbody.appendChild(rows[i]);
     }
-  });
-
-  // 기존 행을 모두 제거
-  tbody.innerHTML = '';
-
-  // 정렬된 행을 다시 테이블에 추가
-  for (var i = 0; i < rows.length; i++) {
-    tbody.appendChild(rows[i]);
   }
-}
-
-// ABCD순 알파벳 정렬 버튼 클릭 시
-document.getElementById('sort-alphabet').addEventListener('click', function() {
-  sortWordsByAlphabet();
-});
-
+  
+  // ABCD순 알파벳 정렬 버튼 클릭 시
+  document.getElementById('sort-alphabet').addEventListener('click', function() {
+    sortWordsByAlphabet();
+  });
+  
+  
 var hideEnglishButton = document.getElementById('hide-english');
 var hideMeaningButton = document.getElementById('hide-meaning');
 var englishColumns = document.querySelectorAll('.word-table td:nth-child(1)');
@@ -125,56 +126,4 @@ function toggleColumnsVisibility(columns) {
 
 function toggleButtonText(button, hidden, originalText, alternativeText) {
   button.textContent = hidden ? alternativeText : originalText;
-}
-
-var wordTable = document.querySelector('.word-table tbody');
-
-// 동적으로 단어를 추가하는 함수
-function addWordToTable(word, meaning, type, memo) {
-  var newRow = document.createElement('tr');
-  newRow.innerHTML = `
-    <td>${word}</td>
-    <td>${meaning}</td>
-    <td>${type}</td>
-    <td class="memo-cell">${memo}</td>
-  `;
-  wordTable.appendChild(newRow);
-}
-
-// 동적으로 단어를 추가
-addWordToTable('Opportunity', '기회', 'Noun', '');
-addWordToTable('Efficient', '효율적인', 'Adjective', '');
-addWordToTable('Consistent', '일관된', 'Adjective', '');
-addWordToTable('Strategy', '전략', 'Noun', '');
-addWordToTable('Participate', '참여하다', 'Verb', '');
-addWordToTable('Significant', '상당한', 'Adjective', '');
-addWordToTable('Improve', '개선하다', 'Verb', '');
-addWordToTable('Benefit', '혜택', 'Noun', '');
-addWordToTable('Challenge', '도전', 'Noun', '');
-addWordToTable('Motivate', '동기 부여하다', 'Verb', '');
-
-var hideEnglishButton = document.getElementById('hide-english');
-var hideMeaningButton = document.getElementById('hide-meaning');
-var englishColumns = document.querySelectorAll('.word-table td:nth-child(1)');
-var meaningColumns = document.querySelectorAll('.word-table td:nth-child(2)');
-var englishHidden = false;
-var meaningHidden = false;
-
-hideEnglishButton.addEventListener('click', function() {
-  toggleColumnsVisibility(englishColumns);
-  englishHidden = !englishHidden;
-  toggleButtonText(hideEnglishButton, englishHidden, '영어 가리기', '영어 보이기');
-});
-
-hideMeaningButton.addEventListener('click', function() {
-  toggleColumnsVisibility(meaningColumns);
-  meaningHidden = !meaningHidden;
-  toggleButtonText(hideMeaningButton, meaningHidden, '뜻 가리기', '뜻 보이기');
-});
-
-function toggleColumnsVisibility(columns) {
-  for (var i = 0; i < columns.length; i++) {
-    var column = columns[i];
-    column.classList.toggle('hidden');
-  }
 }
