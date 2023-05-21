@@ -1,0 +1,217 @@
+body {
+    background-color: rgb(248, 246, 207);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.header-title {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 45px;
+}
+
+.word {
+    border : 1px solid lightgray;
+    background-color: white;
+    border-radius: 3px;
+    font-size: 18px;
+    padding: 10px 60px;
+}
+
+.space {
+    margin-bottom: 20px;
+    font-size: 30px;
+}
+
+.button-grid {
+    display: grid;
+    grid-gap: 30px;
+}
+
+.button {
+    display: flex;
+    justify-content: center; /* 가로 가운데 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+    margin: 0 auto; /* 수평 가운데 정렬 */
+}
+
+.gray_btn {
+    background-color: #E0E0E0;
+    border-radius: 3px;
+    font-size: 18px; 
+    padding: 10px 100px;
+    border: none;
+}
+.gray_btn:hover {
+    background-color: white;
+}
+.gray_btn:focus {
+    box-shadow: 0 0 0 1px black;
+}
+.gray_btn:active {
+    background-color: white;
+}
+
+.black_btn {
+    background-color: #413f3f;
+    color: white;
+    border-radius: 3px;
+    font-size: 15px; 
+    padding: 1px 10px;
+    border: none;
+}
+.black_btn:hover {
+    background-color: lightgray;
+}
+.black_btn:focus {
+    box-shadow: 0 0 0 1px black;
+}
+.black_btn:active {
+    background-color: lightgray;
+}
+
+
+#goBack {
+    width: fit-content;
+    background-color: transparent;
+    border: 1px solid rgb(205, 212, 215);
+    border-radius: 10px;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.progress-bar {
+    width: 200px;
+    height: 10px;
+    background-color: #dedede;
+    border-radius: 6px;
+}
+
+.progress-bar .progress {
+    width: 40%;  /* 퍼센트 값 */
+    height: 10px;
+    padding: 0;
+    background-color: rgb(50, 212, 96);
+    border-radius: 6px;
+}
+
+.progress-bar .progress2 {
+    width: 70%;  /* 퍼센트 값 */
+    height: 10px;
+    padding: 0;
+    background-color: rgb(50, 212, 96);
+    border-radius: 6px;
+}
+
+#goBack:hover {
+    background-color: #4287f5;
+    color: #fff;
+}
+
+.user-info {
+    display: flex;
+    margin-bottom: 10px;
+}
+  
+.user-info img {
+    margin-top: 15px;
+    margin-right: 15px;
+    margin-left: 60px;
+    width: 50px;
+    height: 50px;
+}
+  
+.user-info #username {
+    margin-top: 22px;
+    margin-left: 15px; /* 이미지와 텍스트 사이의 간격 */
+    font-size: 18px;
+}
+
+.test-result{
+    text-align: center;
+    font-size: 17px;
+}
+
+.test-result .score{
+    background-color: #E0E0E0;
+    border-radius: 15px;
+    padding: 5px 50px;
+    clip-path: polygon(20px 0, calc(100% - 20px) 0, 100% 20px, 
+               100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0 calc(100% - 20px), 0 20px);
+}
+
+.test-result .level{
+    background-color: rgb(60, 202, 136);
+    color: white;
+    border-radius: 15px;
+    padding: 5px 30px;
+}
+
+.test-result .expec{
+    background-color:#E0E0E0;
+    padding: 5px 50px;
+}
+
+.targetScore {
+    display: inline-block;
+    text-align: center;
+    background-color:lightgray;
+    border-radius: 3px;
+    position :relative;
+    left: 165px;
+}
+
+.targetScore .score{
+    font-size: 20px;
+    width: 50px;
+    height: 0px;
+    margin: 0px;
+    padding: 0px 10px;
+}
+
+.minus_btn {
+    font-size: 30px;
+    margin: 0 auto;
+    position: relative;
+    bottom: -20px;
+    left: -80px;
+    padding: 0px 13px;
+    border: black;
+}
+.minus_btn:hover {
+    background-color: white;
+}
+.minus_btn:focus {
+    box-shadow: 0 0 0 1px black;
+}
+.minus_btn:active {
+    background-color: white;
+}
+
+.plus_btn {
+    font-size: 30px;
+    margin: 0 auto;
+    position: relative;
+    top: -15px;
+    left: 80px;
+    padding: 0px 10px;
+    border: black;
+}
+.plus_btn:hover {
+    background-color: white;
+}
+.plus_btn:focus {
+    box-shadow: 0 0 0 1px black;
+}
+.plus_btn:active {
+    background-color: white;
+}
