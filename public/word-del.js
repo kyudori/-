@@ -53,20 +53,8 @@ document.getElementById('del-word').addEventListener('click', async () => {
   }
 });
 
+const goBackButton = document.getElementById('go-back');
 
-document.getElementById('go-back').addEventListener('click', () => {
-    fetch('/go-back', {
-      method: 'GET'
-    })
-      .then(response => {
-        if (response.ok) {
-          // 이전 페이지로 이동 성공
-          window.location.href = response.url; // 이전 페이지로 리다이렉트
-        } else {
-          console.error('이전 페이지로 이동 중 오류가 발생했습니다.');
-        }
-      })
-      .catch(error => {
-        console.error('이전 페이지로 이동 중 오류가 발생했습니다.', error);
-      });
-  });
+goBackButton.addEventListener('click', () => {
+  window.location.href = 'word-list-edit.html';
+});
