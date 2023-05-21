@@ -150,3 +150,45 @@ body {
     margin-right: auto;
     margin-left: auto;
 }
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  margin-bottom: 10px;
+  padding: 8px;
+  text-align: left;
+}
+
+.form-group input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group input[type="text"]::placeholder {
+  text-align: left;
+}
+
+.input-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+.label-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 5px;
+}
+
+.label-container label {
+  margin-right: 5px;
+}
+
