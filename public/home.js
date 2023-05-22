@@ -1,24 +1,27 @@
 // home.js
 async function checkAdminStatus() {
-    try {
-      const response = await fetch('/admin');
-      const { isAdmin } = await response.json();
-      console.log(isAdmin);
-  
-      const editWordButton = document.getElementById('edit-word');
-      if (isAdmin==true) {
-        editWordButton.addEventListener('click', () => {
-          window.location.href = 'word-list-edit.html'; // 단어 수정 페이지로 이동
-        });
-      } else {
-        editWordButton.style.display = 'none'; // 관리자가 아닌 경우 버튼을 숨김
-      }
-    } catch (error) {
-      console.error('관리자 여부 확인 중 오류:', error);
-    }
-  }
+  try {
+    const response = await fetch('/admin');
+    const { isAdmin, username } = await response.json();
+    console.log(isAdmin);
 
-  checkAdminStatus();
+    const usernameElement = document.getElementById('username');
+    usernameElement.textContent = `${username}님`; // Set the username dynamically
+
+    const editWordButton = document.getElementById('edit-word');
+    if (isAdmin == true) {
+      editWordButton.addEventListener('click', () => {
+        window.location.href = 'word-list-edit.html'; // Redirect to the word edit page
+      });
+    } else {
+      editWordButton.style.display = 'none'; // Hide the button if not an admin
+    }
+  } catch (error) {
+    console.error('Error checking admin status:', error);
+  }
+}
+
+checkAdminStatus();
 
     // 로그아웃 버튼 클릭 시
     const logoutButton = document.getElementById('logout');

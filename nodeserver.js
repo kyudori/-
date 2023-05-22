@@ -227,15 +227,16 @@ app.post('/login', async (req, res) => {
   });
 
   app.get('/admin', (req, res) => {
-    // 세션에서 사용자 정보 가져오기
+    // Get the user information from the session
     const { user } = req.session;
-
+  
     console.log(user);
   
-    // 사용자가 존재하고 관리자인지 확인
+    // Check if the user exists and is an admin
     const isAdmin = user && user.Admin;
+    const username = user ? user.Name : '';
   
-    res.status(200).json({ isAdmin });
+    res.status(200).json({ isAdmin, username });
   });
   
 
