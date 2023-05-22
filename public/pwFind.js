@@ -1,32 +1,37 @@
 const findPasswordButton = document.getElementById('findPassword');
 const goBackButton = document.getElementById('goBack');
 
-findPasswordButton.addEventListener('click', () => {
+findPasswordButton.addEventListener('click', async () => {
   const nameInput = document.getElementById('name');
   const idInput = document.getElementById('id');
   const emailInput = document.getElementById('email');
 
-  // 입력된 이름, ID, 이메일로 비밀번호를 찾는 로직을 구현합니다.
-  const foundPassword = findPassword(nameInput.value, idInput.value, emailInput.value);
+  const name = nameInput.value;
+  const id = idInput.value;
+  const email = emailInput.value;
 
-  if (foundPassword) {
-    alert(`찾은 비밀번호: ${foundPassword}`);
-  } else {
-    alert('일치하는 비밀번호를 찾을 수 없습니다.');
+  try {
+    const response = await fetch('/find-password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, id, email })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert(`찾은 비밀번호: ${data.password}`);
+    } else {
+      alert('일치하는 비밀번호를 찾을 수 없습니다.');
+    }
+  } catch (error) {
+    console.error('비밀번호 찾기 중 오류:', error);
+    alert('비밀번호 찾기 중 오류가 발생했습니다.');
   }
 });
 
 goBackButton.addEventListener('click', () => {
   window.location.href = 'login.html';
 });
-
-function findPassword(name, id, email) {
-  // 여기에 실제로 비밀번호를 찾는 로직을 구현합니다.
-  // 입력된 이름, ID, 이메일을 가지고 서버 등에서 비밀번호를 조회하고 반환합니다.
-  // 예시로 임의의 비밀번호를 반환하도록 하겠습니다.
-  if (name === '한규현' && id === 'sogong8' && email === 'sogong8@naver.com') {
-    return 'pwsogong8';
-  } else {
-    return null;
-  }
-}

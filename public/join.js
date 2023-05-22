@@ -1,13 +1,13 @@
 const joinButton = document.getElementById('join');
-const adminCodeInput = document.getElementById('grade');
 const goBackButton = document.getElementById('goBack');
 
-joinButton.addEventListener('click', () => {
+joinButton.addEventListener('click', async () => {
   const nameInput = document.getElementById('name');
   const idInput = document.getElementById('id');
   const passwordInput = document.getElementById('password');
   const passwordCheckInput = document.getElementById('passwordchk');
   const emailInput = document.getElementById('email');
+  const adminCodeInput = document.getElementById('grade');
   
   const name = nameInput.value;
   const userid = idInput.value;
@@ -31,7 +31,6 @@ joinButton.addEventListener('click', () => {
     return;
   }
 
-  // 서버로 회원 가입 데이터를 전송하는 부분
   const userData = {
     name: name,
     userid: userid,
@@ -40,16 +39,6 @@ joinButton.addEventListener('click', () => {
     adminCode: adminCode
   };
 
-  // 서버에 회원 가입 데이터를 전송하는 비동기 함수 호출
-  sendUserData(userData);
-});
-
-goBackButton.addEventListener('click', () => {
-  window.location.href = 'login.html';
-});
-
-// 서버로 회원 가입 데이터를 전송하는 비동기 함수
-async function sendUserData(userData) {
   try {
     const response = await fetch('/register', {
       method: 'POST',
@@ -67,10 +56,24 @@ async function sendUserData(userData) {
         alert('일반 회원으로 가입되었습니다.');
       }
       window.location.href = 'login.html';
+    } else if (response.status === 400) {
+      const errorData = await response.json();
+      if (errorData.error === '이미 사용 중인 ID입니다.') {
+        alert(errorData.error);
+      } else if (errorData.error === '이미 사용 중인 이메일입니다.') {
+        alert(errorData.error);
+      } else {
+        alert('회원 가입 중 오류가 발생했습니다.');
+      }
     } else {
       alert('회원 가입 중 오류가 발생했습니다.');
     }
   } catch (error) {
     console.error('회원 가입 요청 중 오류:', error);
+    alert('회원 가입 중 오류가 발생했습니다.');
   }
-}
+});
+
+goBackButton.addEventListener('click', () => {
+  window.location.href = 'login.html';
+});

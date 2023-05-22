@@ -83,20 +83,38 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.post('/register', async (req, res) => {
-  const { name, userid, password, email, adminCode } = req.body;  // 변경된 변수 이름: userid
-  
+  const { name, userid, password, email, adminCode } = req.body;
+
   try {
     await sequelize.sync();
+    
+    // 이미 사용 중인 이메일인지 확인
+    const existingUserEmail = await Users.findOne({ where: { Email: email } });
+    if (existingUserEmail) {
+      console.log("이미 사용 중인 이메일입니다.");
+      res.status(400).json({ error: "이미 사용 중인 이메일입니다." });
+      return;
+    }
+
+    // 이미 사용 중인 ID인지 확인
+    const existingUserId = await Users.findOne({ where: { Userid: userid } });
+    if (existingUserId) {
+      console.log("이미 사용 중인 ID입니다.");
+      res.status(400).json({ error: "이미 사용 중인 ID입니다." });
+      return;
+    }
+
     const user = await Users.create({
       Name: name,
       Userid: userid,
       Password: password,
-      Email: email, 
+      Email: email,
       Admin: adminCode === 'sogong8',
       Goal: null,
       Score: null,
       Level: null
     });
+
     console.log("사용자가 회원 가입되었습니다.");
     console.log(user.toJSON());
     res.status(200).json({ admin: user.Admin });
@@ -105,6 +123,44 @@ app.post('/register', async (req, res) => {
     res.sendStatus(500);
   }
 });
+
+
+app.post('/find-id', async (req, res) => {
+  const { name, email } = req.body;
+
+  try {
+    await sequelize.sync();
+    const user = await Users.findOne({ where: { Name: name, Email: email } });
+
+    if (user) {
+      res.status(200).json({ id: user.Userid });
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (error) {
+    console.error('아이디 찾기 중 오류:', error);
+    res.sendStatus(500);
+  }
+});
+
+app.post('/find-password', async (req, res) => {
+  const { name, id, email } = req.body;
+
+  try {
+    await sequelize.sync();
+    const user = await Users.findOne({ where: { Name: name, Userid: id, Email: email } });
+
+    if (user) {
+      res.status(200).json({ password: user.Password });
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (error) {
+    console.error('비밀번호 찾기 중 오류:', error);
+    res.sendStatus(500);
+  }
+});
+
 
 app.post('/login', async (req, res) => {
     const { userid, password } = req.body;
