@@ -73,7 +73,7 @@ const Words = sequelize.define('Words', {
   },
   Day: {
     type: DataTypes.INTEGER,
-    allowNull: true
+    allowNull: false
   }
 }, {
   timestamps: true // createdAt 및 updatedAt 필드를 자동으로 관리
@@ -237,6 +237,7 @@ app.post('/login', async (req, res) => {
   
     res.status(200).json({ isAdmin });
   });
+  
 
   app.post('/logout', (req, res) => {
     req.session.destroy((err) => {
@@ -248,6 +249,44 @@ app.post('/login', async (req, res) => {
       }
     });
   });
+
+// 단어 목록 조회 API
+app.get('/words', async (req, res) => {
+  try {
+    // 데이터베이스에서 단어 목록 조회
+    const words = await Words.findAll();
+
+    // 조회된 단어 데이터를 JSON 형식으로 반환
+    res.json({ words });
+  } catch (error) {
+    // 오류 처리
+    console.error('단어 목록 조회 중 오류가 발생했습니다:', error);
+    res.status(500).json({ error: '단어 목록 조회 중 오류가 발생했습니다.' });
+  }
+});
+
+app.put('/words/:english', async (req, res) => {
+  const english = req.params.english;
+  const { memo } = req.body;
+
+  try {
+    const word = await Words.findOne({ where: { English: english } });
+    if (!word) {
+      res.status(404).json({ error: '단어를 찾을 수 없습니다.' });
+      return;
+    }
+
+    // Memo 업데이트
+    word.Memo = memo;
+    await word.save();
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Memo 업데이트 중 오류가 발생했습니다:', error);
+    res.status(500).json({ error: 'Memo 업데이트 중 오류가 발생했습니다.' });
+  }
+});
+
 
 
 app.post('/word-add', async (req, res) => {
@@ -354,3 +393,148 @@ app.get('/search-word', async (req, res) => {
   app.listen(port, () => {
     console.log(`서버가 실행되었습니다. http://localhost:${port}`);
   });
+
+
+
+
+
+
+
+
+  // ======================단어 삽입=========================== //
+
+  async function addWords(english, meaning, verb, day) {
+    try {
+      await sequelize.sync();
+      
+      // 이미 존재하는 단어인지 확인
+      const existingWord = await Words.findOne({
+        where: { English: english }
+      });
+  
+      // 이미 존재하는 단어인 경우 추가하지 않음
+      if (existingWord) {
+        console.log('이미 존재하는 단어입니다:', existingWord.toJSON());
+        return null;
+      }
+  
+      // 존재하지 않는 단어인 경우 추가
+      const word = await Words.create({
+        English: english,
+        Meaning: meaning,
+        Verb: verb,
+        Day: day
+      });
+  
+      console.log('단어가 추가되었습니다:', word.toJSON());
+      return word.toJSON();
+    } catch (error) {
+      console.error('단어 추가 오류:', error);
+      throw error;
+    }
+  }
+
+  addWords('discard', '버리다', '동사', 1);
+  addWords('advantageous', '유리한', '형용사', 1);
+  addWords('contribute', '기여하다', '동사', 1);
+  addWords('decrease', '감소하다', '동사', 1);
+  addWords('examine', '조사하다', '동사', 1);
+  addWords('fundamental', '근본적인', '형용사', 1);
+  addWords('generate', '생성하다', '동사', 1);
+  addWords('hinder', '방해하다', '동사', 1);
+  addWords('illustrate', '예시로 보여주다', '동사', 1);
+  addWords('juncture', '시점', '명사', 1);
+  addWords('accomplish', '달성하다', '동사', 1);
+  addWords('leisure', '여가', '명사', 1);
+  addWords('magnify', '확대하다', '동사', 1);
+  addWords('negotiate', '협상하다', '동사', 1);
+  addWords('objective', '목표', '명사', 1);
+  addWords('pursue', '추구하다', '동사', 1);
+  addWords('qualify', '자격을 얻다', '동사', 1);
+  addWords('reliable', '믿을 만한', '형용사', 1);
+  addWords('substantial', '상당한', '형용사', 1);
+  addWords('terminate', '끝내다', '동사', 1);
+  
+  addWords('ability', '능력', '명사', 2);
+  addWords('business', '비즈니스', '명사', 2);
+  addWords('customer', '고객', '명사', 2);
+  addWords('decision', '결정', '명사', 2);
+  addWords('education', '교육', '명사', 2);
+  addWords('factor', '요소', '명사', 2);
+  addWords('global', '세계적인', '형용사', 2);
+  addWords('health', '건강', '명사', 2);
+  addWords('industry', '산업', '명사', 2);
+  addWords('job', '일', '명사', 2);
+  addWords('knowledge', '지식', '명사', 2);
+  addWords('language', '언어', '명사', 2);
+  addWords('management', '관리', '명사', 2);
+  addWords('necessary', '필요한', '형용사', 2);
+  addWords('organization', '조직', '명사', 2);
+  addWords('production', '생산', '명사', 2);
+  addWords('quality', '질', '명사', 2);
+  addWords('resource', '자원', '명사', 2);
+  addWords('strategy', '전략', '명사', 2);
+  addWords('technology', '기술', '명사', 2);
+
+  addWords('analyze', '분석하다', '동사', 3);
+  addWords('collaborate', '협력하다', '동사', 3);
+  addWords('efficiency', '효율성', '명사', 3);
+  addWords('expand', '확장하다', '동사', 3);
+  addWords('innovation', '혁신', '명사', 3);
+  addWords('motivate', '동기를 부여하다', '동사', 3);
+  addWords('productivity', '생산성', '명사', 3);
+  addWords('resolve', '해결하다', '동사', 3);
+  addWords('skill', '기술', '명사', 3);
+  addWords('strategic', '전략적인', '형용사', 3);
+  addWords('team', '팀', '명사', 3);
+  addWords('training', '훈련', '명사', 3);
+  addWords('vision', '비전', '명사', 3);
+  addWords('goal', '목표', '명사', 3);
+  addWords('performance', '성과', '명사', 3);
+  addWords('communication', '의사 소통', '명사', 3);
+  addWords('leadership', '리더십', '명사', 3);
+  addWords('problem-solving', '문제 해결', '명사', 3);
+  addWords('decision-making', '의사 결정', '명사', 3);
+  addWords('organizational', '조직의', '형용사', 3);
+
+  addWords('acquire', '습득하다', '동사', 4);
+  addWords('adapt', '적응하다', '동사', 4);
+  addWords('challenge', '도전', '명사', 4);
+  addWords('commitment', '헌신', '명사', 4);
+  addWords('creativity', '창의성', '명사', 4);
+  addWords('diligent', '근면한', '형용사', 4);
+  addWords('empower', '권한을 부여하다', '동사', 4);
+  addWords('entrepreneur', '기업가', '명사', 4);
+  addWords('ethical', '윤리적인', '형용사', 4);
+  addWords('flexibility', '유연성', '명사', 4);
+  addWords('initiative', '주도적인 태도', '명사', 4);
+  addWords('innovative', '혁신적인', '형용사', 4);
+  addWords('market', '시장', '명사', 4);
+  addWords('network', '네트워크', '명사', 4);
+  addWords('problem-solving', '문제 해결', '명사', 4);
+  addWords('resilience', '탄력', '명사', 4);
+  addWords('strategic', '전략적인', '형용사', 4);
+  addWords('teamwork', '팀워크', '명사', 4);
+  addWords('vision', '비전', '명사', 4);
+  addWords('work-life balance', '일과 삶의 균형', '명사', 4);
+
+  addWords('abandon', '버리다', '동사', 5);
+  addWords('benefit', '이익', '명사', 5);
+  addWords('compete', '경쟁하다', '동사', 5);
+  addWords('develop', '개발하다', '동사', 5);
+  addWords('efficient', '효율적인', '형용사', 5);
+  addWords('flexible', '유연한', '형용사', 5);
+  addWords('global', '세계적인', '형용사', 5);
+  addWords('hire', '고용하다', '동사', 5);
+  addWords('increase', '증가하다', '동사', 5);
+  addWords('jobseeker', '구직자', '명사', 5);
+  addWords('knowledge', '지식', '명사', 5);
+  addWords('leadership', '리더십', '명사', 5);
+  addWords('negotiate', '협상하다', '동사', 5);
+  addWords('opportunity', '기회', '명사', 5);
+  addWords('performance', '성과', '명사', 5);
+  addWords('qualify', '자격을 갖추다', '동사', 5);
+  addWords('resource', '자원', '명사', 5);
+  addWords('strategy', '전략', '명사', 5);
+  addWords('team', '팀', '명사', 5);
+  addWords('unique', '독특한', '형용사', 5);
