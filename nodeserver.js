@@ -425,6 +425,36 @@ app.get('/search-word', async (req, res) => {
     }
   });
 
+    app.get('/words3', async (req, res) => {
+    try {
+      // 데이터베이스에서 단어 목록 조회 (랜덤한 순서로)
+      const words = await Words.findAll({
+        order: Sequelize.literal('random()'),
+      });
+  
+      // 조회된 단어 데이터를 JSON 형식으로 반환
+      res.json(words);
+    } catch (error) {
+      // 오류 처리
+      console.error('단어 목록 조회 중 오류가 발생했습니다:', error);
+      res.status(500).json({ error: '단어 목록 조회 중 오류가 발생했습니다.' });
+    }
+  });
+
+  app.get('/random-word', (req, res) => {
+    // Retrieve a random word from the Words table
+    db.query('SELECT * FROM Words ORDER BY RAND() LIMIT 1', (error, results) => {
+      if (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Failed to fetch random word' });
+      } else {
+        const randomWord = results[0]; // Random word retrieved from the database
+        res.json(randomWord);
+      }
+    });
+  });
+
+
   app.get('/wrong-choices', async (req, res) => {
     try {
       const currentQuestionIndex = req.query.currentQuestionIndex;
@@ -442,38 +472,49 @@ app.get('/search-word', async (req, res) => {
       res.status(500).json({ error: 'Failed to retrieve wrong choices.' });
     }
   });
+
+  // POST /submit 엔드포인트
+  app.post('/submit', (req, res) => {
+    // 클라이언트로부터 전송된 데이터 처리
+    const { answers } = req.body;
+    const yourUserId = req.session.user.Userid; // 사용자 ID를 세션에서 가져옴
   
+    // 세션에서 사용자 정보 가져오기
+    if (!yourUserId) {
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
   
-  
+    // 사용자 정보 업데이트
+    Users.update({ Level: level }, { where: { Userid: yourUserId } })
+      .then(() => {
+        // 업데이트 성공 응답
+        res.json({ success: true });
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+      });
+  });
   
 
   app.post('/update-user-level', (req, res) => {
-    const { level } = req.body;
-    const { userId } = req.session; // 사용자 세션에서 userId 가져오기
+    const { userid, level } = req.body;
   
-    // userId를 사용하여 해당 사용자를 Users DB에서 찾음
-    Users.findOne({ where: { Userid: userId } })
-      .then((user) => {
-        if (user) {
-          // 사용자가 존재하는 경우 레벨을 업데이트
-          user.update({ Level: level })
-            .then(() => {
-              res.json({ success: true });
-            })
-            .catch((error) => {
-              console.error('Error updating user level:', error);
-              res.json({ success: false });
-            });
-        } else {
-          // 사용자가 존재하지 않는 경우
-          res.json({ success: false });
-        }
+    Users.update({ Level: level }, { where: { Userid: userid } })
+      .then(() => {
+        res.json({ success: true });
       })
       .catch((error) => {
-        console.error('Error finding user:', error);
+        console.error('Error:', error);
         res.json({ success: false });
       });
   });
+  
+  app.get('/get-userid', (req, res) => {
+    const userid = req.session.userid;
+    res.json({ userid });
+});
+
   
   app.listen(port, () => {
     console.log(`서버가 실행되었습니다. http://localhost:${port}`);
