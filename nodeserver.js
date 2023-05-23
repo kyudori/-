@@ -1,3 +1,4 @@
+//nodeserver.js
 const express = require('express');
 const { Sequelize, DataTypes } = require('sequelize');
 
@@ -384,23 +385,95 @@ app.get('/search-word', async (req, res) => {
     }
   });
   
+
+  app.post('/ability-test', async (req, res) => {
+    const { userid, score, level } = req.body;
   
-  app.get('/go-back', (req, res) => {
-    // 이전 페이지의 URL로 리다이렉트
-    const referer = req.headers.referer;
-    res.redirect(referer);
+    try {
+      await sequelize.sync();
+      const user = await Users.findOne({ where: { Userid: userid } });
+  
+      if (user) {
+        // Update the user's score and level
+        user.Score = score;
+        user.Level = level;
+        await user.save();
+  
+        console.log('능력 평가 결과가 업데이트되었습니다:', user.toJSON());
+        res.status(200).json({ success: true });
+      } else {
+        console.log('사용자를 찾을 수 없습니다.');
+        res.status(404).json({ error: '사용자를 찾을 수 없습니다.' });
+      }
+    } catch (error) {
+      console.error('능력 평가 결과 업데이트 중 오류가 발생했습니다:', error);
+      res.sendStatus(500);
+    }
+  });
+
+  app.get('/words2', async (req, res) => {
+    try {
+      // 데이터베이스에서 단어 목록 조회
+      const words = await Words.findAll();
+  
+      // 조회된 단어 데이터를 JSON 형식으로 반환
+      res.json(words);
+    } catch (error) {
+      // 오류 처리
+      console.error('단어 목록 조회 중 오류가 발생했습니다:', error);
+      res.status(500).json({ error: '단어 목록 조회 중 오류가 발생했습니다.' });
+    }
+  });
+
+  app.get('/wrong-choices', async (req, res) => {
+    try {
+      const words = await Words.findAll({
+        attributes: ['Meaning'],
+        limit: 3
+      });
+  
+      const wrongChoices = words.map((word) => word.Meaning); // 선택지 배열 생성
+  
+      res.json({ wrongChoices }); // 선택지 배열을 전송
+    } catch (error) {
+      console.error('Failed to retrieve wrong choices:', error);
+      res.status(500).json({ error: 'Failed to retrieve wrong choices.' });
+    }
+  });
+  
+  
+
+  app.post('/update-user-level', (req, res) => {
+    const { level } = req.body;
+    const { userId } = req.session; // 사용자 세션에서 userId 가져오기
+  
+    // userId를 사용하여 해당 사용자를 Users DB에서 찾음
+    Users.findOne({ where: { Userid: userId } })
+      .then((user) => {
+        if (user) {
+          // 사용자가 존재하는 경우 레벨을 업데이트
+          user.update({ Level: level })
+            .then(() => {
+              res.json({ success: true });
+            })
+            .catch((error) => {
+              console.error('Error updating user level:', error);
+              res.json({ success: false });
+            });
+        } else {
+          // 사용자가 존재하지 않는 경우
+          res.json({ success: false });
+        }
+      })
+      .catch((error) => {
+        console.error('Error finding user:', error);
+        res.json({ success: false });
+      });
   });
   
   app.listen(port, () => {
     console.log(`서버가 실행되었습니다. http://localhost:${port}`);
   });
-
-
-
-
-
-
-
 
   // ======================단어 삽입=========================== //
 
@@ -435,6 +508,8 @@ app.get('/search-word', async (req, res) => {
     }
   }
 
+
+  
   addWords('discard', '버리다', '동사', 1);
   addWords('advantageous', '유리한', '형용사', 1);
   addWords('contribute', '기여하다', '동사', 1);
