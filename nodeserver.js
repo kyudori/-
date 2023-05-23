@@ -427,19 +427,23 @@ app.get('/search-word', async (req, res) => {
 
   app.get('/wrong-choices', async (req, res) => {
     try {
-      const words = await Words.findAll({
-        attributes: ['Meaning'],
-        limit: 3
-      });
+      const currentQuestionIndex = req.query.currentQuestionIndex;
   
-      const wrongChoices = words.map((word) => word.Meaning); // 선택지 배열 생성
+      const allWords = await Words.findAll();
+      const currentWord = allWords[currentQuestionIndex];
   
-      res.json({ wrongChoices }); // 선택지 배열을 전송
+      const wrongChoices = allWords.filter(word => word.Meaning !== currentWord.Meaning);
+      const shuffledChoices = wrongChoices.sort(() => 0.5 - Math.random()).slice(0, 3);
+      const choices = shuffledChoices.map(choice => choice.Meaning);
+  
+      res.json(choices);
     } catch (error) {
       console.error('Failed to retrieve wrong choices:', error);
       res.status(500).json({ error: 'Failed to retrieve wrong choices.' });
     }
   });
+  
+  
   
   
 
