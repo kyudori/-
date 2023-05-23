@@ -1,5 +1,7 @@
 //ability-test.js
 
+const progressBar = document.querySelector('.progress');
+
 const questionContainer = document.querySelector('#question-container');
 const option1 = document.querySelector('#option1');
 const option2 = document.querySelector('#option2');
@@ -25,6 +27,12 @@ Promise.all([
   });
 
 const totalQuestions = 10; // 총 문항 수
+
+// 진도 표시 함수
+function updateProgress() {
+  const progressPercentage = (currentQuestionIndex / totalQuestions) * 100;
+  progressBar.style.width = `${progressPercentage}%`;
+}
 
 // 문제 생성 함수
 function generateQuestion() {
@@ -73,6 +81,21 @@ choices.push(
   option3.textContent = choices[2];
   option4.textContent = choices[3];
 
+  
+// 모든 선택지 버튼의 가로 길이를 조정
+const buttons = document.querySelectorAll('.button');
+let maxWidth = 0;
+
+buttons.forEach((button) => {
+  if (button.offsetWidth > maxWidth) {
+    maxWidth = button.offsetWidth;
+  }
+});
+
+buttons.forEach((button) => {
+  button.style.width = `${maxWidth}px`;
+});
+
   // 이벤트 리스너 등록
   option1.addEventListener('click', checkAnswer);
   option2.addEventListener('click', checkAnswer);
@@ -109,6 +132,9 @@ function checkAnswer(event) {
 
   // 다음 문제 생성
   generateQuestion();
+  
+    // 진도 업데이트
+    updateProgress();
 }
 
 // 퀴즈 결과 처리 및 사용자 레벨 업데이트
