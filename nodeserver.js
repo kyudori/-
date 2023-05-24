@@ -1,17 +1,26 @@
 //nodeserver.js
 const express = require('express');
 const { Sequelize, DataTypes } = require('sequelize');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const port = 3000;
 app.use(express.static('public'));
 
-const session = require('express-session');
+
+app.use(cookieParser());
 app.use(session({
-    secret: 'sogong8',  // 세션의 비밀 키 설정
-    resave: false,
-    saveUninitialized: false
-  }));
+  secret: 'sogong8',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    // 쿠키 설정
+    maxAge: 24 * 60 * 60 * 1000, // 세션 만료 시간 (예: 24시간)
+    httpOnly: true, // 클라이언트에서 쿠키에 접근할 수 없도록 설정
+    sameSite: 'strict', // 동일 사이트에서만 쿠키 전송
+  }
+}));
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
@@ -514,6 +523,44 @@ app.get('/search-word', async (req, res) => {
     const userid = req.session.userid;
     res.json({ userid });
 });
+
+// 사용자 정보 가져오기
+app.get('/getUser', (req, res) => {
+  // 세션에서 사용자 ID 가져오기
+  const userId = req.session.userId;
+
+  // 사용자 조회
+  Users.findOne({ where: { Userid: userId } })
+    .then(user => {
+      if (user) {
+        res.json(user);
+      } else {
+        res.status(404).json({ message: 'User not found' });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ error: error.message });
+    });
+});
+
+// Goal 값 업데이트
+app.post('/updateGoal', (req, res) => {
+  // 세션에서 사용자 ID 가져오기
+  const userId = req.session.userId;
+  
+  // 요청에서 전달된 점수 값 가져오기
+  const { score } = req.body;
+
+  // 사용자 조회 및 Goal 값 업데이트
+  Users.update({ Goal: score }, { where: { Userid: userId } })
+    .then(() => {
+      res.json({ message: 'Goal updated successfully' });
+    })
+    .catch(error => {
+      res.status(500).json({ error: error.message });
+    });
+});
+
 
   
   app.listen(port, () => {

@@ -1,12 +1,14 @@
 // home.js
 async function checkAdminStatus() {
   try {
-    const response = await fetch('/admin');
+    const response = await fetch('/admin', {
+      credentials: 'same-origin' // 쿠키 전송 설정
+    });
     const { isAdmin, username } = await response.json();
     console.log(isAdmin);
 
     const usernameElement = document.getElementById('username');
-    usernameElement.textContent = `${username}님`; // Set the username dynamically
+    usernameElement.textContent = `${username}`; // Set the username dynamically
 
     const editWordButton = document.getElementById('edit-word');
     if (isAdmin == true) {
@@ -31,6 +33,7 @@ checkAdminStatus();
         try {
           const response = await fetch('/logout', {
             method: 'POST',
+            credentials: 'same-origin' // 쿠키 전송 설정
           });
     
           if (response.ok) {
@@ -59,7 +62,7 @@ checkAdminStatus();
   // Daily Test 목표 점수 버튼 클릭 시
   const dailyTestGoalButton = document.getElementById('daily-test-goal-button');
   dailyTestGoalButton.addEventListener('click', () => {
-    window.location.href = 'targetScore.html'; // Daily Test 목표 점수 페이지로 이동
+    window.location.href = 'targetGoal.html'; // Daily Test 목표 점수 페이지로 이동
   });
 
   // Daily Test 버튼 클릭 시
