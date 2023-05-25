@@ -32,7 +32,7 @@ const Users = sequelize.define('Users', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  Userid: {  // 변경된 열 이름: Userid
+  Userid: {  // 변경된 열 이름: Userid                                                                                    
     type: DataTypes.STRING,
     allowNull: false
   },

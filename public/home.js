@@ -56,7 +56,7 @@ checkAdminStatus();
   // 단어 그룹 버튼 클릭 시
   const wordGroupButton = document.getElementById('word-group-button');
   wordGroupButton.addEventListener('click', () => {
-    window.location.href = 'word-group.html'; // 단어 그룹 페이지로 이동
+    window.location.href = 'group.html'; // 단어 그룹 페이지로 이동
   });
 
   // Daily Test 목표 점수 버튼 클릭 시
