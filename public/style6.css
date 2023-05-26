@@ -25,7 +25,7 @@ body {
     margin: 0 auto; /* 수평 가운데 정렬 */
 }
 
-.black_btn2 {
+.black_btn {
     background-color: #413f3f;
     color: white;
     border-radius: 3px;
@@ -33,49 +33,25 @@ body {
     padding: 8px 15px;
     border: none;
 }
-.black_btn2:hover {
+.black_btn:hover {
     background-color: lightgray;
 }
-.black_btn2:focus {
+.black_btn:focus {
     box-shadow: 0 0 0 1px black;
 }
-.black_btn2:active {
+.black_btn:active {
     background-color: lightgray;
 }
-
-.black_btn1 {
-    background-color: #413f3f;
-    color: white;
-    border-radius: 3px;
-    font-size: 16px; 
-    padding: 8px 15px;
-    border: none;
-}
-.black_btn1:hover {
-    background-color: lightgray;
-}
-.black_btn1:focus {
-    box-shadow: 0 0 0 1px black;
-}
-.black_btn1:active {
-    background-color: lightgray;
-}
-
 
 .space {
     margin-left: 35px;
     font-size: 30px;
 }
 
-#group-list {
-    display: flex;
-    flex-direction: column;
-  }
-
-#group-list button {
+.white_btn {
     background-color: white;
     border-radius: 3px;
-    font-size: 17px;
+    font-size: 17px; 
     padding: 10px 10px;
     width: 300px;
     height: 50px;
@@ -84,21 +60,16 @@ body {
     border: 1px solid #ccc;
     margin: 5px;
     cursor: pointer;
-  }
-  
-  #group-list button:hover {
+}
+.white_btn:hover {
     background-color: #E0E0E0;
-  }
-  
-  #group-list button:focus {
+}
+.white_btn:focus {
     box-shadow: 0 0 0 1px black;
-  }
-  
-  #group-list button:active {
+}
+.white_btn:active {
     background-color: #E0E0E0;
-  }
-    
-    
+}
 
 #go-back {
     width: fit-content;
@@ -119,3 +90,42 @@ body {
     background-color: #4287f5;
     color: #fff;
 }
+
+.form-group input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+    height: 100px; /* 높이 */
+    font-size: 16px; /* 폰트 크기 */
+}
+  
+.form-group label {
+    margin-bottom: 5px;
+    font-size: 20px;
+}
+  
+.form-group input {
+    margin-bottom: 10px;
+    padding: 10px;
+    text-align: left;
+}
+  
+.form-group input[type="text"]::placeholder {
+    text-align: left;
+}
+  
+.input-container {
+    display: flex;
+    align-items: flex-start;
+}
+
+.label-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 10px;;
+}
+  
+.label-container label {
+    margin-right: 20px;
+}
+  

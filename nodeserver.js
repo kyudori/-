@@ -89,6 +89,20 @@ const Words = sequelize.define('Words', {
   timestamps: true // createdAt 및 updatedAt 필드를 자동으로 관리
 });
 
+
+const Group = sequelize.define('Group', {
+  Name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+}, {
+  timestamps: true
+});
+
+// 그룹과 단어 간의 일대다 관계 설정
+Group.hasMany(Words);
+Words.belongsTo(Group);
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -561,6 +575,185 @@ app.post('/updateGoal', (req, res) => {
     });
 });
 
+app.post('/add-group', (req, res) => {
+  const groupName = req.body.groupName;
+
+  // 중복 체크
+  Group.findOne({ where: { Name: groupName } }).then((group) => {
+    if (group) {
+      // 중복된 이름의 그룹이 이미 존재하는 경우
+      res.json({ success: false, message: '이미 존재하는 그룹 이름입니다.' });
+    } else {
+      // 새로운 그룹 생성
+      Group.create({ Name: groupName })
+        .then(() => {
+          res.json({ success: true, message: '그룹이 추가되었습니다.' });
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          res.json({ success: false, message: '그룹 추가에 실패했습니다.' });
+        });
+    }
+  });
+});
+
+
+// 그룹 삭제
+app.post('/delete-group', async (req, res) => {
+  const { groupName } = req.body;
+  
+  try {
+    const deletedGroup = await Group.destroy({
+      where: { Name: groupName },
+      cascade: true // 관련된 단어도 함께 삭제
+    });
+    
+    if (deletedGroup > 0) {
+      res.json({ success: true });
+    } else {
+      console.error('그룹 삭제에 실패했습니다: 해당 그룹을 찾을 수 없습니다.');
+      res.json({ success: false, error: '그룹 삭제에 실패했습니다: 해당 그룹을 찾을 수 없습니다.' });
+    }
+  } catch (error) {
+    console.error('그룹 삭제에 실패했습니다:', error);
+    res.json({ success: false, error: '그룹 삭제에 실패했습니다.' });
+  }
+});
+
+// 그룹 목록 가져오기
+app.get('/get-groups', async (req, res) => {
+  try {
+    const groups = await Group.findAll();
+    res.json({ success: true, groups });
+  } catch (error) {
+    console.error('그룹 목록 가져오기에 실패했습니다:', error);
+    res.json({ success: false, error: '그룹 목록 가져오기에 실패했습니다.' });
+  }
+});
+
+// 단어 존재 여부 확인 API
+app.get('/check-word', async (req, res) => {
+  const { groupName, english } = req.query;
+
+  try {
+    const group = await Group.findOne({
+      where: { Name: groupName }
+    });
+
+    if (group) {
+      const word = await Words.findOne({
+        where: { GroupId: group.id, English: english }
+      });
+
+      res.json({ exists: !!word });
+    } else {
+      res.json({ exists: false });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: '서버 에러' });
+  }
+});
+
+// 단어 추가 API
+app.post('/add-word', async (req, res) => {
+  const { groupName, english } = req.query;
+
+  try {
+    const group = await Group.findOne({
+      where: { Name: groupName }
+    });
+
+    if (group) {
+      const word = await Words.create({
+        English: english,
+        GroupId: group.id
+      });
+
+      res.json({ success: true });
+    } else {
+      res.status(400).json({ error: '그룹 없음' });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: '서버 에러' });
+  }
+});
+
+// 단어 삭제 API
+app.post('/remove-word', async (req, res) => {
+  const { groupName, english } = req.query;
+
+  try {
+    const group = await Group.findOne({
+      where: { Name: groupName }
+    });
+
+    if (group) {
+      const word = await Words.findOne({
+        where: { GroupId: group.id, English: english }
+      });
+
+      if (word) {
+        await word.destroy();
+        res.json({ success: true });
+      } else {
+        res.status(400).json({ error: '단어 없음' });
+      }
+    } else {
+      res.status(400).json({ error: '그룹 없음' });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: '서버 에러' });
+  }
+});
+
+// 그룹 내 단어 존재 여부 확인 API
+app.get('/check-word-in-group', async (req, res) => {
+  const { groupName, english } = req.query;
+
+  try {
+    const group = await Group.findOne({
+      where: { Name: groupName }
+    });
+
+    if (group) {
+      const word = await Words.findOne({
+        where: { GroupId: group.id, English: english }
+      });
+
+      res.json({ exists: !!word });
+    } else {
+      res.json({ exists: false });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: '서버 에러' });
+  }
+});
+
+app.get('/group-words', (req, res) => {
+  const groupName = req.query.groupName;
+
+  Group.findOne({ where: { Name: groupName } })
+    .then(group => {
+      if (!group) {
+        res.status(404).json({ error: '그룹을 찾을 수 없습니다.' });
+      } else {
+        Words.findAll({ where: { GroupId: group.id } })
+          .then(words => {
+            res.json(words);
+          })
+          .catch(error => {
+            res.status(500).json({ error: '단어 조회 중 오류가 발생했습니다.' });
+          });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ error: '그룹 조회 중 오류가 발생했습니다.' });
+    });
+});
 
   
   app.listen(port, () => {
