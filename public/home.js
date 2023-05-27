@@ -68,7 +68,7 @@ checkAdminStatus();
   // Daily Test 버튼 클릭 시
   const dailyTestButton = document.getElementById('daily-test-button');
   dailyTestButton.addEventListener('click', () => {
-    window.location.href = 'daily-test.html'; // Daily Test 페이지로 이동
+    window.location.href = 'daily-test-group.html'; // Daily Test 페이지로 이동
   });
 
   // 능력 점검 Test 버튼 클릭 시

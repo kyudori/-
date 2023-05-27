@@ -1,3 +1,15 @@
+document.addEventListener('DOMContentLoaded', () => {
+  // 그룹 추가 버튼
+  const groupAddButton = document.getElementById('group-add');
+  groupAddButton.style.display = 'block'; // 버튼을 보이게 함
+
+  // 그룹 삭제 버튼
+  const groupDelButton = document.getElementById('group-del');
+  groupDelButton.style.display = 'block'; // 버튼을 보이게 함
+
+  // 기타 코드...
+});
+
 // 그룹 추가
 async function addGroup() {
   const groupName = prompt('추가하려는 그룹 이름을 입력하세요:');
@@ -23,7 +35,7 @@ async function addGroup() {
       // 그룹 삭제를 위한 이벤트 핸들러 등록
       groupButton.addEventListener('click', () => {
         // 그룹 단어 목록 페이지로 이동
-        window.location.href = `group-word-list.html?groupName=${groupName}`;
+        window.location.href = `dailyTest.html?groupName=${groupName}`;
       });
 
       // 생성된 버튼을 그룹 리스트에 추가
@@ -81,7 +93,7 @@ async function loadGroups() {
         groupButton.id = `group-${groupName}`;
         groupButton.addEventListener('click', () => {
           // 그룹 단어 목록 페이지로 이동
-          window.location.href = `group-word-list.html?groupName=${groupName}`;
+          window.location.href = `dailyTest.html?groupName=${groupName}`;
         });
         document.getElementById('group-list').appendChild(groupButton);
       }

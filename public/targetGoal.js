@@ -58,21 +58,6 @@ confirmButton.addEventListener('click', () => {
   window.location.href = './home.html';
 });
 
-// 서버에서 사용자 정보 가져오기
-fetch('/getUser', {
-    credentials: 'same-origin'
-  })
-    .then(response => response.json())
-    .then(user => {
-      // 사용자 정보를 표시할 DOM 요소 찾기
-      const usernameElement = document.getElementById('username');
-  
-      // 사용자 이름 표시
-      usernameElement.textContent = user.Name + ' 님';
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
 
 const goBackButton = document.getElementById('go-back');
 goBackButton.addEventListener('click', () => {
